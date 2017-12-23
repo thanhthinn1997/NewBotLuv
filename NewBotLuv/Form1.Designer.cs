@@ -36,6 +36,8 @@
             // 
             // textBox1
             // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
+            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(12, 286);
             this.textBox1.MinimumSize = new System.Drawing.Size(531, 40);
             this.textBox1.Multiline = true;
@@ -57,15 +59,20 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(14, 270);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
+            this.label1.Size = new System.Drawing.Size(65, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Hỏi tại đây";
             // 
             // textBox2
             // 
-            this.textBox2.Enabled = false;
+            this.textBox2.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.textBox2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBox2.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.ForeColor = System.Drawing.Color.Brown;
+            this.textBox2.HideSelection = false;
             this.textBox2.Location = new System.Drawing.Point(15, 31);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";

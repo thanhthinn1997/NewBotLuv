@@ -15,38 +15,24 @@ namespace NewBotLuv
         public Form1()
         {
             InitializeComponent();
-
-            /*
-            for (;;)
-            {
-                // display a command prompt and wait for user input
-                Console.Write("> ");
-                string expr = Console.ReadLine();
-
-                // catch ?xxx and restate as help(xxx)
-                if (expr.Substring(0, 1) == "?")
-                    expr = "help(" + expr.Substring(1, 0) + ");";
-
-                // This evaluates the inputted expression and sends the text output
-                // to the text callback (cbText).  It also returns a handle to the
-                // result.  Use a colon to terminate the statement if you don't
-                // want any output (a result is still returned).
-                IntPtr val = MapleEngine.EvalMapleStatement(kv, expr + ";");
-
-                // check if user typed quit/done/stop
-                if (MapleEngine.IsMapleStop(kv, val))
-                    break;
-            }
-
-            MapleEngine.StopMaple(kv);*/
+            textBox2.Text += "***** Tớ là bot chuyên thực hiện khảo sát hàm số!" + Environment.NewLine +
+                "***** Hãy nhập hàm số tớ cần khảo sát nhé!" + Environment.NewLine +
+                "***** Lưu ý: " + Environment.NewLine +
+                "***** - Tớ chỉ đủ thông minh giải tới hàm số cấp 3. Xin lỗi người ấy nhe!" + Environment.NewLine +
+                "***** - Tớ không đủ thông minh để chatchit với cậu :) Nếu tớ im lặng, nghĩa là tớ không biết thôi." + Environment.NewLine +
+                "***** - Có lẽ tớ sẽ có bugs, nếu có thì hãy kiên nhẫn với tớ." + Environment.NewLine +
+                "Hết rồi! Chúc người ấy may mắn nhé :)" + Environment.NewLine +
+                "--------------------------------------------------------------" + Environment.NewLine;
         }
+
+        public static String finalOutput;
 
         // When evaluating something Maple will send all displayed
         // output through this function.
         public static void cbText(IntPtr data, int tag, String output)
         {
             //Console.WriteLine("tag is " + tag );
-            Console.WriteLine(output);
+            finalOutput = output;
         }
 
         // When evaluating something Maple will send errors through this function.
@@ -54,7 +40,7 @@ namespace NewBotLuv
         public static void cbError(IntPtr data, IntPtr offset, String msg)
         {
             //Console.WriteLine("offset is " + offset.ToInt32() );
-            Console.WriteLine(msg);
+            finalOutput = msg + "abc";
         }
 
         // When evaluating something Maple will send a message about resources
@@ -62,18 +48,18 @@ namespace NewBotLuv
         // messages, just comment out the WriteLine command inside.
         public static void cbStatus(IntPtr data, IntPtr used, IntPtr alloc, double time)
         {
-            Console.WriteLine("cputime=" + time
+            finalOutput = "cputime=" + time
               + "; memory used=" + used.ToInt64() + "kB"
-              + " alloc=" + alloc.ToInt64() + "kB"
-            );
+              + " alloc=" + alloc.ToInt64() + "kB";
         }
 
-        private string TinhHamso()
+        IntPtr kv;
+
+        private string TinhHamso(string equa)
         {
             //BeginLoadMaple
             MapleEngine.MapleCallbacks cb;
             byte[] err = new byte[2048];
-            IntPtr kv;
 
             // pass -A2 which sets kernelopts(assertlevel=2) just to show
             // how in this example.  The corresponding argc parameter 
@@ -120,7 +106,15 @@ namespace NewBotLuv
                         + System.Text.Encoding.ASCII.GetString(err, 0, Array.IndexOf(err, (byte)0))
                     );
             }
-            return "";
+
+
+            // This evaluates the inputted expression and sends the text output
+            // to the text callback (cbText).  It also returns a handle to the
+            // result.  Use a colon to terminate the statement if you don't
+            // want any output (a result is still returned).
+            IntPtr val = MapleEngine.EvalMapleStatement(kv, "solve(" + equa + ");");
+
+            return finalOutput;
         }
 
         string temp;
@@ -145,6 +139,16 @@ namespace NewBotLuv
                 textBox1.Clear();
                 textBox2.Text += Environment.NewLine + "Me: " + temp
                     + Environment.NewLine + "Bot: " + CalltheAnswer(temp);
+                if(temp.Contains("x^3"))
+                {
+                    textBox2.Text += Environment.NewLine +
+                        "***** Đã nhận được hàm số, hãy chọn bài toán bạn cần mình giải nhé: " +
+                        Environment.NewLine +
+                        "***** Nhấp 1: Khảo sát hàm số + vẽ đồ thị" + Environment.NewLine +
+                        "***** Nhấp 2: Lập phương trình tiếp tuyến" + Environment.NewLine +
+                        "***** Nhấp 3: Xét tính đơn điệu hàm số" + Environment.NewLine +
+                        "***** Nhấp 4: Tìm điểm cực đại + cực tiểu";
+                }
             }
         }
 
@@ -156,23 +160,51 @@ namespace NewBotLuv
 
             if (greetings.Contains(temp.ToLower()))
             {
-                Random randNum = new Random();
-                return greetings[randNum.Next(0, greetings.Count)];
+                return "Tớ không tính chào cậu lại đâu hehe :)";
             }
             else if (temp.Contains("x^3"))
             {
-                return "Đang tính hàm số cấp 3:..."; //chỗ này return string output ở cbText nè :)))
+                List<char> formula = new List<char>(new char[] { ' ', 'x', 'y', '^', '+', '-', '*', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '='});
+                string tmp = "";
+                int beg = -1;
+                int length = 0;
+                for(int i = 0; i < temp.Count(); i++)
+                {
+                    if (formula.Contains(temp[i]) && beg == -1 && temp[i]!=' ')
+                    {
+                        beg = i;
+                        length = 1;
+                    }
+                    else
+                    {
+                        if (formula.Contains(temp[i])) length++;
+                    }                    
+                }
+                tmp = temp.Substring(beg, length);
+
+                return tmp; //chỗ này return string output ở cbText nè :)))
             }
             else if(goodbyeph.Contains(temp.ToLower()))
             {
                 Random randNum = new Random();
+                MapleEngine.StopMaple(kv);
                 return goodbyeph[randNum.Next(0, goodbyeph.Count)];
+            }
+            else if(temp.Contains("1"))
+            {
+                return "Thuc hien ngu nguoi 1 :)";
+            }
+            else if(temp.Contains("2"))
+            {
+                return "Thuc hien ngu nguoi 2 :)";
             }            
-            meow = "";
+            else if(temp.Contains("3"))
+            {
+                return "Thuc hien ngu nguoi 3 :)";
+            }
+            meow = "Tớ không hiểu gì cả hiu hiu :)";
 
             return meow;
         }
-
-
     }
 }
