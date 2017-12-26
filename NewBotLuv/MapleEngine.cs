@@ -34,13 +34,13 @@ namespace NewBotLuv
 
         // OpenMaple API methods (there are many more commands in the API,
         // these are just the ones we are using in this example)
-        [DllImport(@"maplec.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("maplec.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr StartMaple(int argc, String[] argv, ref MapleCallbacks cb, IntPtr data, IntPtr info, byte[] err);
 
-        [DllImport(@"maplec.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
+        [DllImport("maplec.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr EvalMapleStatement(IntPtr kv, [In, MarshalAs(UnmanagedType.LPStr)] String statement);
 
-        [DllImport(@"maplec.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("maplec.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr xIsMapleStop(IntPtr kv, IntPtr obj);
         public static bool IsMapleStop(IntPtr kv, IntPtr obj)
         {
@@ -49,7 +49,7 @@ namespace NewBotLuv
             return xIsMapleStop(kv, obj).ToInt32() == 0 ? true : false;
         }
 
-        [DllImport(@"maplec.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("maplec.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void StopMaple(IntPtr kv);
     }
 }
